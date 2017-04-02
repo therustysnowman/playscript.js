@@ -1,0 +1,58 @@
+<html>
+<head>
+  <script src='../playscriptWidgets.js'></script>
+  <style>
+    .editor {
+      width: 100%;
+      height: 100%;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class='editor ps-container'></div>
+<script>
+window.onload = function() {
+  var editor = playscriptWidgets.modelEditor.create(
+    document.getElementsByClassName('editor')[0],
+    {
+      properties: {
+        name: { type: "string" },
+        position: { type: "vector" },
+        active: { type: "boolean" },
+        count: { type: "integer" },
+        price: { type: "double" },
+        collisionGroups: { type: "stringlist" }
+      },
+      hooks: {
+        onCreate: {}
+      },
+      data: {},
+      functions: {}
+    },
+    {
+      properties: {
+        collisionGroups: ["a", "b"],
+        active: true,
+        name: "test"
+      },
+      hooks: {
+        onCreate: "a function"
+      },
+      data: {
+        _model: {
+          b: { type: "boolean" }
+        },
+        a: "value"
+      }
+    }
+  );
+  editor.addListener({
+    "modelEditor-change": function() {
+      console.log(editor.getData());
+    }
+  });
+}
+</script>
+</body>
+</html>

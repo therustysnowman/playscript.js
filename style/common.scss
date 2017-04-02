@@ -1,0 +1,13 @@
+$fontFamily: "Arial";
+$fontSize: 11px;
+
+.ps-container {
+  font-family: $fontFamily;
+  font-size: $fontSize;
+}
+
+.ps-container {
+  input, select, button {
+    font-size: $fontSize;
+  }
+}

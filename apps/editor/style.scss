@@ -6,6 +6,8 @@ $bottomDockHeight: 100px;
 $uiBorderColor: #bbb;
 $uiPanelColor: #eee;
 
+@import "../../style/common";
+
 .ps-menu {
   position: absolute;
   top: 0;

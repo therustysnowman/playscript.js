@@ -5,7 +5,8 @@ module.exports = {
   entry: {
     'playscript': './lib/playscript.js',
     'playscriptEditor': './apps/editor/app.js',
-    'playscriptExecutor': './apps/executor/app.js'
+    'playscriptExecutor': './apps/executor/app.js',
+    'playscriptWidgets': './widgets/library.js'
   },
   output: {
     filename: '[name].js',

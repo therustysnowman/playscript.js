@@ -1,40 +1,52 @@
 
-module.exports = {
-  create: create
-}
+module.exports = FunctionEditor;
 
 require('./style.scss');
 
-function create(content) {
+var ErrorBar = require("../errorBar/widget.js");
+var Tools = require("../tools.js");
 
-  var _editor = document.createElement("textarea");
-  _editor.classList.add("ps-functionEditor");
-  _editor.value = content;
+function FunctionEditor(opts) {
 
-  _editor.addEventListener(["keyup", "change"], function() {
+  var _element = Tools.initContainer(opts.container);
+
+  _element.classList.add("ps-functionEditor");
+  _element.classList.add("ps-flex-vert");
+  _element.innerHTML = require("./template.html");
+
+  var _editor = _element.querySelector("textarea");
+  _editor.value = opts.value;
+
+  var _errors = new ErrorBar({
+    container: _element.querySelector(".js-errors")
+  });
+  _errors.clear();
+
+  _element.addEventListener(["keyup", "change"], function() {
     validate();
   });
 
-  function get() {
+  this.getValue = function() {
     return _editor.value;
   }
 
-  function set(value) {
-    _editor.value = value;
+  this.setValue = function(newValue) {
+    _element._editor = newValue;
   }
 
-  function validate() {
-    console.log("Validate: " + get());
+  this.validate = function() {
+    var valid = false;
+    _errors.setErrors([
+      "Number 1",
+      "Number 2",
+      "Number 3",
+      "Number 4"
+    ]);
+    this.getValue();
+    return valid;
   }
 
-  var _interface = {
-    validate: validate,
-    get: get,
-    set: set,
-    appendTo: function(container) {
-      container.appendChild(_editor);
-    }
-  };
-
-  return _interface;
+  this.appendTo = function(container) {
+    container.appendChild(_element);
+  }
 }

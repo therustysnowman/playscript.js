@@ -2,5 +2,5 @@
 require('../style/common.scss');
 
 module.exports = {
-  modelEditor: require('./modelEditor/widget')
+  ModelEditor: require('./modelEditor/widget').constructor
 };

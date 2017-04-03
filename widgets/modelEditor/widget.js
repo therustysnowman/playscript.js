@@ -1,10 +1,12 @@
 
 module.exports = {
-  create: create
+  constructor: ModelEditor
 };
 
+
+var Dialog = require('../dialog/widget');
 var Util = require("../../lib/util");
-var createTrigger = require("../../lib/trigger").create;
+var createTrigger = require("../../lib/trigger").createTrigger;
 
 require("./style.scss");
 
@@ -20,18 +22,21 @@ function FieldEditor(className, template, opts) {
   this._wrapper.classList.add(className);
   this._wrapper.innerHTML = template;
 
-  this._wrapper.querySelector(".js-label").textContent =
-    Util.isUndefined(opts.model.label) ? opts.name: opts.model.label;
+  if (opts.hideLabel === true) {
+    this._wrapper.querySelector(".js-label").style.display = "none";
+  } else {
+    this._wrapper.querySelector(".js-label").textContent =
+      Util.isUndefined(opts.model.label) ? opts.name : opts.model.label;
+  }
 
-  this._trigger = createTrigger("fieldEditor");
-  this._trigger.addInterface(this);
+  this._trigger = createTrigger(this, "ps-fieldEditor");
 
   var that = this;
   var delButton = this._wrapper.querySelector(".js-delField");
   if (delButton !== null) {
     if (opts.custom === true) {
       delButton.addEventListener("click", function() {
-        that._trigger.trigger("delete", that);
+        that._trigger.trigger("delete");
         that._wrapper.parentNode.removeChild(that._wrapper);
       });
     } else {
@@ -336,8 +341,7 @@ VectorEditor.prototype.getValue = function() {
 
 /** FunctionEditor ************************************************************/
 
-var createDialog = require('../dialog/widget').create;
-var createFunctionEditor = require('../functionEditor/widget').create;
+var FunctionEditorObj = require('../functionEditor/widget');
 
 function FunctionEditor(opts) {
 
@@ -353,19 +357,23 @@ function FunctionEditor(opts) {
   this._button.addEventListener("click", function() {
 
     var container = document.createElement("div");
-    var funcEditor = createFunctionEditor(that.isSet() ? that.getValue() : "");
+    var funcEditor = new FunctionEditorObj({
+      value: that.isSet() ? that.getValue() : ""
+    });
     funcEditor.appendTo(container);
 
-    var dialogHandle = createDialog(
-      name + " function editor",
-      container,
-      [
+    var dialogHandle = new Dialog({
+      title: name + " function editor",
+      content: container,
+      buttons: [
         {
           label: "OK",
           callback: function() {
-            that.setValue(funcEditor.get());
-            that._changed();
-            dialogHandle.close();
+            if (funcEditor.validate()) {
+              that.setValue(funcEditor.getValue());
+              that._changed();
+              dialogHandle.close();
+            }
           }
         },
         {
@@ -375,7 +383,7 @@ function FunctionEditor(opts) {
           }
         }
       ]
-    );
+    });
   });
 }
 FunctionEditor.prototype = Object.create(FieldEditor.prototype);
@@ -458,16 +466,18 @@ function createEditor(args, defaultType) {
   return editor;
 }
 
-function create(container, model, data) {
+function ModelEditor(container, model, data) {
 
-  var _trigger = createTrigger("modelEditor");
+  var _trigger = createTrigger(this, "ps-modelEditor");
 
   function triggerChange() {
-    _trigger.trigger("change", _interface);
+    _trigger.trigger("change");
   }
+
   var _listener = {
-    "fieldEditor-change": triggerChange,
-    "fieldEditor-delete": function(field) {
+    "ps-fieldEditor:change": triggerChange,
+    "ps-fieldEditor:delete": function(event) {
+      var field = event.source;
       var index = objects[field.getGroup()].indexOf(field);
       if (index > -1) {
         objects[field.getGroup()].splice(index, 1);
@@ -550,10 +560,10 @@ function create(container, model, data) {
       var dialogContent = document.createElement("div");
       dialogContent.innerHTML = require("./customDataDialog.html");
 
-      var dialogHandle = createDialog(
-        "Add custom data item",
-        dialogContent,
-        [
+      var dialogHandle = new Dialog({
+        title: "Add custom data item",
+        content: dialogContent,
+        buttons: [
           {
             label: "Create",
             callback: function() {
@@ -579,7 +589,7 @@ function create(container, model, data) {
             }
           }
         ]
-      );
+      });
     }
 
     var addButton = document.createElement("button");
@@ -638,10 +648,10 @@ function create(container, model, data) {
       var dialogContent = document.createElement("div");
       dialogContent.innerHTML = require("./customFunctionDialog.html");
 
-      var dialogHandle = createDialog(
-        "Add custom function",
-        dialogContent,
-        [
+      var dialogHandle = new Dialog({
+        title: "Add custom function",
+        content: dialogContent,
+        buttons: [
           {
             label: "Create",
             callback: function() {
@@ -663,7 +673,7 @@ function create(container, model, data) {
             }
           }
         ]
-      );
+      });
     }
 
     var addButton = document.createElement("button");
@@ -684,31 +694,25 @@ function create(container, model, data) {
     });
   }
 
-  var _interface = {
-    getData: function() {
-      var data = {};
-      ["properties", "hooks", "functions"].forEach(function(section) {
-        if (objects[section].length > 0) {
-          data[section] = {};
-          var models = {};
-          objects[section].forEach(function(obj) {
-            obj.getData(data[section]);
-          });
-        }
-      });
-      if (objects.data.length > 0) {
-        data.data = {};
-        data.data._model = {};
-        objects.data.forEach(function(obj) {
-          obj.getData(data.data);
-          obj.getModel(data.data._model);
+  this.getData = function() {
+    var data = {};
+    ["properties", "hooks", "functions"].forEach(function(section) {
+      if (objects[section].length > 0) {
+        data[section] = {};
+        var models = {};
+        objects[section].forEach(function(obj) {
+          obj.getData(data[section]);
         });
       }
-      return data;
+    });
+    if (objects.data.length > 0) {
+      data.data = {};
+      data.data._model = {};
+      objects.data.forEach(function(obj) {
+        obj.getData(data.data);
+        obj.getModel(data.data._model);
+      });
     }
+    return data;
   };
-
-  _trigger.addInterface(_interface);
-
-  return _interface;
 }

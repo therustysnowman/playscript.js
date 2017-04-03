@@ -11,3 +11,16 @@ $fontSize: 11px;
     font-size: $fontSize;
   }
 }
+
+.ps-flex-horiz {
+  display: flex;
+}
+
+.ps-flex-vert {
+  display: flex;
+  flex-direction: column;
+}
+
+.ps-flex-fill {
+  flex-grow: 1;
+}

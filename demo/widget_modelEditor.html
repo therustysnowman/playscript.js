@@ -13,7 +13,7 @@
   <div class='editor ps-container'></div>
 <script>
 window.onload = function() {
-  var editor = playscriptWidgets.modelEditor.create(
+  var editor = new playscriptWidgets.ModelEditor(
     document.getElementsByClassName('editor')[0],
     {
       properties: {
@@ -48,7 +48,7 @@ window.onload = function() {
     }
   );
   editor.addListener({
-    "modelEditor-change": function() {
+    "ps-modelEditor:change": function() {
       console.log(editor.getData());
     }
   });

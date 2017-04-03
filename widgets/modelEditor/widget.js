@@ -29,14 +29,14 @@ function FieldEditor(className, template, opts) {
       Util.isUndefined(opts.model.label) ? opts.name : opts.model.label;
   }
 
-  this._trigger = createTrigger(this, "ps-fieldEditor");
+  this._trigger = createTrigger(this);
 
   var that = this;
   var delButton = this._wrapper.querySelector(".js-delField");
   if (delButton !== null) {
     if (opts.custom === true) {
       delButton.addEventListener("click", function() {
-        that._trigger.trigger("delete");
+        that._trigger.fire("delete");
         that._wrapper.parentNode.removeChild(that._wrapper);
       });
     } else {
@@ -58,7 +58,7 @@ FieldEditor.prototype.getName = function() {
 }
 
 FieldEditor.prototype._changed = function() {
-  this._trigger.trigger("change", this);
+  this._trigger.fire("change", this);
 }
 
 FieldEditor.prototype.appendTo = function(container) {
@@ -468,15 +468,15 @@ function createEditor(args, defaultType) {
 
 function ModelEditor(container, model, data) {
 
-  var _trigger = createTrigger(this, "ps-modelEditor");
+  var _trigger = createTrigger(this);
 
   function triggerChange() {
-    _trigger.trigger("change");
+    _trigger.fire("change");
   }
 
   var _listener = {
-    "ps-fieldEditor:change": triggerChange,
-    "ps-fieldEditor:delete": function(event) {
+    change: triggerChange,
+    delete: function(event) {
       var field = event.source;
       var index = objects[field.getGroup()].indexOf(field);
       if (index > -1) {

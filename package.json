@@ -1,7 +1,7 @@
 {
   "name": "playscript.js",
   "version": "0.0.0",
-  "description": "",
+  "description": "Game engine",
   "main": "lib/playscript.js",
   "scripts": {
     "build": "node_modules/.bin/webpack",

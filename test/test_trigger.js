@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var Trigger = require('../lib/trigger');
+var Trigger = require('../src/trigger');
 
 function Emitter(id) {
 

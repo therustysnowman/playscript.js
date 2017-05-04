@@ -2,8 +2,8 @@
 var Container = require('./container');
 var Executor = require('./executor');
 
-var AssetLibrary = require("./assetLibrary");
-var assetLibrary = new AssetLibrary();
+var Definitions = require("./definitions");
+var definitions = new Definitions();
 
 module.exports = {
   /* Create and return an empty playscript container */
@@ -18,7 +18,7 @@ module.exports = {
   execute: function(canvas, definition, opts) {
     return Executor.create(canvas, definition, opts);
   },
-  assetLibrary: function() {
-    return assetLibrary;
+  definitions: function() {
+    return definitions;
   }
 };

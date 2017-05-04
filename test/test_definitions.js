@@ -29,7 +29,7 @@ defs.add("TYPE-A", "A_BASE", A_BASE);
 defs.add("TYPE-A", "A_EXTENSION", A_EXTENSION);
 defs.add("TYPE-A", "A_UNKNOWN", A_UNKNOWN);
 
-describe('assetLibrary', function() {
+describe('definitions', function() {
 
   beforeEach(function() {
   });

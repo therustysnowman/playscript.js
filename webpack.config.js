@@ -3,9 +3,7 @@ var webpack = require('webpack');
 
 module.exports = {
   entry: {
-    'playscript': './lib/playscript.js',
-    'playscriptEditor': './apps/editor/app.js',
-    'playscriptExecutor': './apps/executor/app.js'
+    'playscript': './src/playscript.js'
   },
   output: {
     filename: '[name].js',
@@ -13,27 +11,20 @@ module.exports = {
     libraryTarget: 'var',
     path: path.resolve(__dirname, 'dist')
   },
-  module: {
-    rules: [
-      {
-        test: /\.scss$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader'
-        ]
-      },
-      {
-        test: /\.html$/,
-        use: [
-          'html-loader'
-        ]
-      }
-    ]
-  },
   plugins: [
       new webpack.optimize.UglifyJsPlugin({
         include: /\.min\.js$/
+      }),
+      new webpack.optimize.CommonsChunkPlugin({
+        name: "playscript-deps",
+        // (the commons chunk name)
+
+        filename: "playscript-deps.js",
+        // (the filename of the commons chunk)
+
+        minChunks: function(module, count) {
+          return module.resource && (/node_modules/).test(module.context);
+        }
       })
   ],
   devServer: {

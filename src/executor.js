@@ -1,13 +1,12 @@
 
-module.exports = {
-  create: create
-};
+module.exports = Executor;
 
-var createEnum = require('./enum.js').create;
-var LoadingScene = require('./loadingScene.js');
+var Enum = require('./enum.js').constructor;
+var LoadingScene = require('./loadingScene.js').constructor;
+
 var loadContainer = require('./container.js').load;
 
-var STATE = createEnum([
+var STATE = new Enum([
   'LOADING',
   'LOADED',
   'PAUSED',
@@ -15,7 +14,7 @@ var STATE = createEnum([
   'ENDED'
 ]);
 
-function create(canvas, definition, callbacks, opts) {
+function Executor(canvas, definition, callbacks, opts) {
 
   var _state = STATE.LOADING;
   var _scene = LoadingScene;
@@ -30,13 +29,6 @@ function create(canvas, definition, callbacks, opts) {
   _renderer.view.style.position = 'absolute';
   _renderer.view.style.display = 'block';
   _renderer.autoResize = true;
-  _resize();
-
-  //window.onresize = _resize;
-
-  function _resize() {
-    _renderer.resize(window.innerWidth, window.innerHeight);
-  }
 
   var _playscript = loadContainer(definition, {
     loaded: function() {
@@ -57,12 +49,13 @@ function create(canvas, definition, callbacks, opts) {
     _scene.render(_renderer);
   }
 
-  var _interface = {
-    resume: function() {
-      console.log('resume');
-    },
-    pause: function() {
-      console.log('pause');
-    }
+  // Public interface
+
+  this.resume = function() {
+    console.log('resume');
+  };
+
+  this.pause = function() {
+    console.log('pause');
   }
 }

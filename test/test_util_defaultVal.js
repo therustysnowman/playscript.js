@@ -1,5 +1,5 @@
 var assert = require('chai').assert;
-var defaultVal = require('../lib/util').defaultVal;
+var defaultVal = require('../src/util').defaultVal;
 
 var notDefined;
 

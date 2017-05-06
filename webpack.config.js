@@ -3,7 +3,7 @@ var webpack = require('webpack');
 
 module.exports = {
   entry: {
-    'playscript': './src/playscript.js'
+    'playscript': './index.js'
   },
   output: {
     filename: '[name].js',
@@ -14,7 +14,7 @@ module.exports = {
   plugins: [
       new webpack.optimize.UglifyJsPlugin({
         include: /\.min\.js$/
-      }),
+      })/*,
       new webpack.optimize.CommonsChunkPlugin({
         name: "playscript-deps",
         // (the commons chunk name)
@@ -25,7 +25,7 @@ module.exports = {
         minChunks: function(module, count) {
           return module.resource && (/node_modules/).test(module.context);
         }
-      })
+      })*/
   ],
   devServer: {
     contentBase: 'demo',

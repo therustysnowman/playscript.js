@@ -1,5 +1,7 @@
 
-module.exports = Definitions;
+module.exports = {
+  constructor: Definitions
+};
 
 var extend = require("./util.js").extend;
 

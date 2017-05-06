@@ -3,9 +3,9 @@ var Trigger = require('../src/trigger');
 
 function Emitter(id) {
 
-  var _trigger = Trigger.createTrigger(this);
+  var _trigger = Trigger.addTriggerInterface(this);
 
-  this.id = "A";
+  this.id = id;
 
   this.fire = function(eventName) {
     _trigger.fire.apply(this, arguments);

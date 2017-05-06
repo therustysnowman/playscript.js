@@ -25,7 +25,7 @@ function _addTriggerInterface(obj, prefix) {
       _listeners = [];
     },
     fire: function(eventName) {
-      var funcName = prefix + eventName;
+      var funcName = _prefix + eventName;
       var args = Array.prototype.slice.call(arguments, 1);
       args.unshift({ source: obj });
       _listeners.forEach(function(listener) {

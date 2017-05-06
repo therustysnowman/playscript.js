@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var Definitions = require('../src/definitions');
+var Definitions = require('../src/definitions').constructor;
 
 var defs = new Definitions();
 
